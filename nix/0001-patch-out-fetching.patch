@@ -1,0 +1,130 @@
+From 4db04b50cd257b7eaf4f9908c35ca06e09901703 Mon Sep 17 00:00:00 2001
+From: John Children <john.children@cambridgequantum.com>
+Date: Thu, 13 Mar 2025 14:12:42 +0000
+Subject: [PATCH] patch out fetching
+
+fix library name
+
+add package alias
+
+swap order
+
+patch names?
+
+fix it?
+
+give up
+
+no module
+
+remove system
+
+try again
+
+change back linking
+
+change back order
+
+change name
+
+wat
+
+fix it
+
+add install
+
+remove shared libs
+---
+ CMakeLists.txt            | 17 ++---------------
+ python/CMakeLists.txt     |  2 +-
+ src/cppsim/CMakeLists.txt |  6 ++++--
+ src/csim/CMakeLists.txt   | 10 ++++++----
+ 4 files changed, 13 insertions(+), 22 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3afbe003..8076b606 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -129,21 +129,8 @@ endif()
+ message(STATUS "Boost found at ${Boost_INCLUDE_DIRS}")
+ 
+ # Eigen
+-set(EIGEN_BUILD_DIR   ${PROJECT_BINARY_DIR}/eigen)
+-set(EIGEN_INSTALL_DIR ${PROJECT_SOURCE_DIR}/include)
+-set(EIGEN_INCLUDE_DIR ${EIGEN_INSTALL_DIR})
+-ExternalProject_Add(
+-    eigen
+-    URL https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.gz
+-    PREFIX ${EIGEN_BUILD_DIR}
+-    CONFIGURE_COMMAND ""
+-    BUILD_COMMAND ""
+-    INSTALL_COMMAND
+-      ${CMAKE_COMMAND} -E copy_directory ${EIGEN_BUILD_DIR}/src/eigen/Eigen ${EIGEN_INCLUDE_DIR}/Eigen
+-      && ${CMAKE_COMMAND} -E copy_directory ${EIGEN_BUILD_DIR}/src/eigen/unsupported ${EIGEN_INCLUDE_DIR}/unsupported
+-    TEST_COMMAND ""
+-)
+-include_directories(SYSTEM ${EIGEN_INCLUDE_DIR})
++find_package(Eigen3 3.4 REQUIRED NO_MODULE)
++include_directories(${EIGEN3_INCLUDE_DIR})
+ 
+ # Google test
+ if(USE_TEST)
+diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
+index c7a4350c..1b32a730 100644
+--- a/python/CMakeLists.txt
++++ b/python/CMakeLists.txt
+@@ -59,4 +59,4 @@ else()
+ endif()
+ 
+ #dependency setting for ExternalProject
+-add_dependencies(qulacs_core eigen)
++add_dependencies(qulacs_core Eigen3::Eigen)
+diff --git a/src/cppsim/CMakeLists.txt b/src/cppsim/CMakeLists.txt
+index 98f147e8..b7960a79 100644
+--- a/src/cppsim/CMakeLists.txt
++++ b/src/cppsim/CMakeLists.txt
+@@ -9,8 +9,8 @@ add_library(cppsim_static STATIC ${CPPSIM_SRC})
+ add_library(cppsim_shared SHARED ${CPPSIM_SRC})
+ target_link_libraries(cppsim_static csim_static)
+ target_link_libraries(cppsim_shared csim_static)
+-add_dependencies(cppsim_static eigen)
+-add_dependencies(cppsim_shared eigen)
++add_dependencies(cppsim_static Eigen3::Eigen)
++add_dependencies(cppsim_shared Eigen3::Eigen)
+ 
+ if (USE_GPU)
+     target_link_libraries(cppsim_static gpusim_static)
+@@ -18,3 +18,5 @@ if (USE_GPU)
+ endif()
+ 
+ set_target_properties(cppsim_shared PROPERTIES EXCLUDE_FROM_ALL TRUE)
++
++install(TARGETS cppsim_static DESTINATION lib)
+diff --git a/src/csim/CMakeLists.txt b/src/csim/CMakeLists.txt
+index 07f8bbb8..d07678f6 100644
+--- a/src/csim/CMakeLists.txt
++++ b/src/csim/CMakeLists.txt
+@@ -15,10 +15,10 @@ endif()
+ 
+ add_library(csim_static STATIC ${CSIM_SRC})
+ add_library(csim_shared SHARED ${CSIM_SRC})
+-#target_link_libraries(csim_static eigen)
+-#target_link_libraries(csim_shared eigen)
+-add_dependencies(csim_static eigen)
+-add_dependencies(csim_shared eigen)
++#target_link_libraries(csim_static Eigen3::Eigen)
++#target_link_libraries(csim_shared Eigen3::Eigen)
++add_dependencies(csim_static Eigen3::Eigen)
++add_dependencies(csim_shared Eigen3::Eigen)
+ 
+ if (MSVC)
+     set_target_properties(csim_static PROPERTIES LINKER_LANGUAGE CXX)
+@@ -26,3 +26,5 @@ if (MSVC)
+ endif()
+ 
+ set_target_properties(csim_shared PROPERTIES EXCLUDE_FROM_ALL TRUE)
++
++install(TARGETS csim_static DESTINATION lib)
+-- 
+2.47.2
+

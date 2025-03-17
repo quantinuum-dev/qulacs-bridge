@@ -1,0 +1,35 @@
+From 61e5816c7e1aae498b78fbdca1e377385c69fa01 Mon Sep 17 00:00:00 2001
+From: John Children <john.children@cambridgequantum.com>
+Date: Thu, 13 Mar 2025 17:11:53 +0000
+Subject: [PATCH 3/3] namespace the paths
+
+---
+ src/cppsim/CMakeLists.txt | 2 +-
+ src/csim/CMakeLists.txt   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/cppsim/CMakeLists.txt b/src/cppsim/CMakeLists.txt
+index a4bef2ca..08937686 100644
+--- a/src/cppsim/CMakeLists.txt
++++ b/src/cppsim/CMakeLists.txt
+@@ -22,5 +22,5 @@ endif()
+ 
+ set_target_properties(cppsim_shared PROPERTIES EXCLUDE_FROM_ALL TRUE)
+ 
+-install(FILES ${CPPSIM_HEADERS} DESTINATION include)
++install(FILES ${CPPSIM_HEADERS} DESTINATION include/cppsim)
+ install(TARGETS cppsim_static DESTINATION lib)
+diff --git a/src/csim/CMakeLists.txt b/src/csim/CMakeLists.txt
+index 880309b7..2a2ddea9 100644
+--- a/src/csim/CMakeLists.txt
++++ b/src/csim/CMakeLists.txt
+@@ -30,5 +30,5 @@ endif()
+ 
+ set_target_properties(csim_shared PROPERTIES EXCLUDE_FROM_ALL TRUE)
+ 
+-install(FILES ${CSIM_HEADERS} DESTINATION include)
++install(FILES ${CSIM_HEADERS} DESTINATION include/csim)
+ install(TARGETS csim_static DESTINATION lib)
+-- 
+2.47.2
+

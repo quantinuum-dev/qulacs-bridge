@@ -1,0 +1,51 @@
+From 5855075111d11ea4e0f4accf54931d2b30283ec6 Mon Sep 17 00:00:00 2001
+From: John Children <john.children@cambridgequantum.com>
+Date: Thu, 13 Mar 2025 17:09:04 +0000
+Subject: [PATCH 2/2] install headers
+
+---
+ src/cppsim/CMakeLists.txt | 4 ++++
+ src/csim/CMakeLists.txt   | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/src/cppsim/CMakeLists.txt b/src/cppsim/CMakeLists.txt
+index b7960a79..a4bef2ca 100644
+--- a/src/cppsim/CMakeLists.txt
++++ b/src/cppsim/CMakeLists.txt
+@@ -1,5 +1,8 @@
+ cmake_minimum_required(VERSION 3.0)
+ 
++file(GLOB CPPSIM_HEADERS
++    "*.hpp"
++)
+ file(GLOB CPPSIM_SRC
+     "*.cpp"
+     "*.hpp"
+@@ -19,4 +22,5 @@ endif()
+ 
+ set_target_properties(cppsim_shared PROPERTIES EXCLUDE_FROM_ALL TRUE)
+ 
++install(FILES ${CPPSIM_HEADERS} DESTINATION include)
+ install(TARGETS cppsim_static DESTINATION lib)
+diff --git a/src/csim/CMakeLists.txt b/src/csim/CMakeLists.txt
+index d07678f6..880309b7 100644
+--- a/src/csim/CMakeLists.txt
++++ b/src/csim/CMakeLists.txt
+@@ -1,5 +1,8 @@
+ cmake_minimum_required(VERSION 3.0)
+ 
++file(GLOB CSIM_HEADERS
++    "*.hpp"
++)
+ file(GLOB CSIM_SRC
+     "*.cpp"
+     "*.hpp"
+@@ -27,4 +30,5 @@ endif()
+ 
+ set_target_properties(csim_shared PROPERTIES EXCLUDE_FROM_ALL TRUE)
+ 
++install(FILES ${CSIM_HEADERS} DESTINATION include)
+ install(TARGETS csim_static DESTINATION lib)
+-- 
+2.47.2
+

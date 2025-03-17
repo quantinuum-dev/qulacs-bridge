@@ -1,0 +1,12 @@
+[package]
+name = "qulacs-bridge"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cxx = "1.0.148"
+tket-json-rs = "0.7.2"
+
+[build-dependencies]
+cxx-build = "1.0.148"
+pkg-config = "0.3.32"
