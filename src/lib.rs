@@ -1,6 +1,5 @@
-use cxx::UniquePtr;
-use ffi::{add_x_gate, new_quantum_circuit, Complex, QuantumCircuit};
-use tket_json_rs::{OpType, SerialCircuit};
+pub use cxx::UniquePtr;
+use ffi::Complex;
 
 #[cxx::bridge]
 pub mod ffi {
@@ -13,10 +12,14 @@ pub mod ffi {
     unsafe extern "C++" {
         include!("qulacs-bridge/include/qulacs-bridge.h");
 
-        pub type QuantumState;
         pub type QuantumStateBase;
 
         pub fn new_quantum_state(qubit_count: u32, multi_cpu: bool) -> UniquePtr<QuantumStateBase>;
+        pub fn quantum_state_sampling(
+            state: &UniquePtr<QuantumStateBase>,
+            sampling_count: u32,
+            seed: u32,
+        ) -> Vec<u64>;
 
         pub type QuantumCircuit;
         pub fn new_quantum_circuit(qubit_count: u32) -> UniquePtr<QuantumCircuit>;
@@ -24,6 +27,7 @@ pub mod ffi {
             circuit: &UniquePtr<QuantumCircuit>,
             state: &UniquePtr<QuantumStateBase>,
         );
+        pub fn add_h_gate(circuit: &UniquePtr<QuantumCircuit>, index: u32);
         pub fn add_x_gate(circuit: &UniquePtr<QuantumCircuit>, index: u32);
         pub fn add_y_gate(circuit: &UniquePtr<QuantumCircuit>, index: u32);
         pub fn add_z_gate(circuit: &UniquePtr<QuantumCircuit>, index: u32);
@@ -39,6 +43,7 @@ pub mod ffi {
         pub type ClsOneQubitGate;
 
         pub fn new_identity_gate(index: u32) -> UniquePtr<QuantumGateBase>;
+        pub fn new_h_gate(index: u32) -> UniquePtr<QuantumGateBase>;
         pub fn new_x_gate(index: u32) -> UniquePtr<QuantumGateBase>;
         pub fn new_y_gate(index: u32) -> UniquePtr<QuantumGateBase>;
         pub fn new_z_gate(index: u32) -> UniquePtr<QuantumGateBase>;
@@ -50,6 +55,7 @@ pub mod ffi {
             target_qubits: &[u32],
             elements: &[Complex],
         ) -> UniquePtr<QuantumGateBase>;
+        pub fn new_measurement(index: u32, reg: u32, seed: u32) -> UniquePtr<QuantumGateBase>;
 
         pub fn merge(
             applied_first: &UniquePtr<QuantumGateBase>,
@@ -67,36 +73,40 @@ pub mod ffi {
     }
 }
 
-pub fn build_circuit(circuit: SerialCircuit) -> UniquePtr<QuantumCircuit> {
-    let qulacs_circuit = new_quantum_circuit(circuit.qubits.len().try_into().unwrap());
-
-    for command in circuit.commands {
-        match command.op.op_type {
-            OpType::X => add_x_gate(&qulacs_circuit, command.args[0].1[0].try_into().unwrap()),
-            _ => unimplemented!(),
-        }
-    }
-
-    qulacs_circuit
-}
-
 impl From<f64> for Complex {
     fn from(value: f64) -> Self {
-        Complex {
+        Self {
             real: value,
             imag: 0.0,
         }
     }
 }
 
+#[cfg(feature = "num")]
+impl From<Complex> for num::Complex<f64> {
+    fn from(value: Complex) -> Self {
+        num::Complex {
+            re: value.real,
+            im: value.imag,
+        }
+    }
+}
+
+#[cfg(feature = "num")]
+impl From<num::Complex<f64>> for Complex {
+    fn from(value: num::Complex<f64>) -> Self {
+        Complex {
+            real: value.re,
+            imag: value.im,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::ffi::{
-        add_gate_copy, add_operator, add_r_x_gate, add_x_gate, get_expectation_value, merge,
-        new_cnot_gate, new_diagonal_matrix_gate, new_observable, new_quantum_circuit,
-        new_quantum_state, new_r_x_gate, new_r_z_gate, new_x_gate, new_y_gate,
-        update_quantum_state, Complex,
-    };
+    use rand::Rng;
+
+    use crate::ffi::*;
 
     #[test]
     fn basic_example() {
@@ -214,5 +224,20 @@ mod tests {
         let value = get_expectation_value(&observable, &state);
         // Value obtained by running the same code from qulacs python.
         assert_eq!(value, Complex::from(-2.9999999999999996));
+    }
+
+    #[test]
+    fn measurement_and_sampling() {
+        let mut rng = rand::rng();
+        let state = new_quantum_state(1, false);
+
+        let circuit = new_quantum_circuit(1);
+        add_h_gate(&circuit, 0);
+        let measurement = new_measurement(0, 0, rng.random());
+        add_gate_copy(&circuit, &measurement);
+        update_quantum_state(&circuit, &state);
+
+        let samples = quantum_state_sampling(&state, 50, 3);
+        assert_eq!(samples.len(), 50);
     }
 }
