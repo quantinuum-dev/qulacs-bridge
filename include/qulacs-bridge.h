@@ -17,14 +17,24 @@ struct Complex;
 std::unique_ptr<QuantumStateBase> new_quantum_state(uint32_t qubit_count_,
                                                     bool use_multi_cpu);
 
+void set_zero_state(const std::unique_ptr<QuantumStateBase> &state);
+void set_haar_random_state(const std::unique_ptr<QuantumStateBase> &state);
+
 rust::Vec<uint64_t>
 quantum_state_sampling(const std::unique_ptr<QuantumStateBase> &state,
                        uint32_t sampling_count, uint32_t seed);
 
+rust::Vec<Complex>
+get_state_vector(const std::unique_ptr<QuantumStateCpu> &state);
+
+rust::Vec<uint64_t>
+get_classical_register(const std::unique_ptr<QuantumStateBase> &state);
+
 std::unique_ptr<QuantumCircuit> new_quantum_circuit(uint32_t qubit_count_);
 
 void update_quantum_state(const std::unique_ptr<QuantumCircuit> &circuit,
-                          const std::unique_ptr<QuantumStateBase> &state);
+                          const std::unique_ptr<QuantumStateBase> &state,
+                          uint32_t seed);
 
 void add_h_gate(const std::unique_ptr<QuantumCircuit> &circuit, uint32_t index);
 void add_x_gate(const std::unique_ptr<QuantumCircuit> &circuit, uint32_t index);
