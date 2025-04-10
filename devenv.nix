@@ -7,7 +7,7 @@ in {
     LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
   };
   
-  packages = [ pkgs.pkg-config pkgs.boost pkgs.eigen pkgs.mpi qulacs pkgs.act ];
+  packages = [ pkgs.boost pkgs.eigen pkgs.mpi qulacs pkgs.release-plz ];
   languages.rust.enable = true;
   languages.nix.enable = true;
 }
