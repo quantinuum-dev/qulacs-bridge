@@ -23,7 +23,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Run release-plz
-        runs: |
+        run: |
           devenv shell release-plz release-pr
           devenv shell release-plz release
         env:
