@@ -12,3 +12,6 @@ devenv.local.nix
 # Added by cargo
 
 /target
+
+# External dependencies
+third_party/
