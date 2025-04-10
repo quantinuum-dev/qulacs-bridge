@@ -22,11 +22,10 @@ jobs:
         with:
           fetch-depth: 0
       - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main  
       - name: Install devenv.sh
         run: nix profile install nixpkgs#devenv
       - name: Run release-plz
-        shell: devenv shell
+        shell: devenv shell '{0}'
         uses: MarcoIeni/release-plz-action@v0.5
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_PLZ_TOKEN }}
