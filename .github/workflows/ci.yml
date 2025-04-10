@@ -16,7 +16,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: DeterminateSystems/nix-installer-action@main
+    - uses: DeterminateSystems/magic-nix-cache-action@main  
+    - name: Install devenv.sh
+      run: nix profile install nixpkgs#devenv
     - name: Build
-      run: cargo build --verbose
+      run: devenv shell cargo build --verbose
     - name: Run tests
-      run: cargo test --verbose
+      run: devenv shell cargo test --verbose
