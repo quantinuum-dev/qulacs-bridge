@@ -174,6 +174,32 @@ std::unique_ptr<QuantumGateBase> new_cnot_gate(uint32_t control,
   return ptr;
 }
 
+uint32_t to_pauli_value(const Pauli p) {
+  switch (p) {
+  case Pauli::X:
+    return 1;
+  case Pauli::Y:
+    return 2;
+  case Pauli::Z:
+    return 3;
+  }
+}
+
+std::unique_ptr<QuantumGateBase>
+new_pauli_rotation_gate(rust::Slice<const uint32_t> target_qubits,
+                        rust::Slice<const Pauli> paulis, double angle) {
+  std::vector<uint32_t> target_qubits_vec;
+  std::copy(target_qubits.begin(), target_qubits.end(),
+            std::back_inserter(target_qubits_vec));
+
+  std::vector<uint32_t> paulis_vec(paulis.size());
+  std::transform(paulis.begin(), paulis.end(), paulis_vec.begin(), to_pauli_value);
+
+  auto pauli = new PauliOperator(target_qubits_vec, paulis_vec, angle);
+  return std::unique_ptr<ClsPauliRotationGate>(
+      new ClsPauliRotationGate(angle, pauli));
+}
+
 std::unique_ptr<QuantumGateBase>
 new_diagonal_matrix_gate(rust::Slice<const uint32_t> target_qubits,
                          rust::Slice<const Complex> elements) {
@@ -181,12 +207,10 @@ new_diagonal_matrix_gate(rust::Slice<const uint32_t> target_qubits,
   std::copy(target_qubits.begin(), target_qubits.end(),
             std::back_inserter(target_qubits_vec));
 
-  // This would be nicer with c++23 but we only have up to c++17 on fugaku.
   ComplexVector elements_vec(elements.size());
-  for (std::size_t index = 0; index < elements.size(); index++) {
-    auto element = elements[index];
-    elements_vec[index] = std::complex<double>(element.real, element.imag);
-  }
+  std::transform(
+      elements.begin(), elements.end(), elements_vec.begin(),
+      [](Complex c) { return std::complex<double>(c.real, c.imag); });
 
   return std::unique_ptr<QuantumGateDiagonalMatrix>(
       new QuantumGateDiagonalMatrix(target_qubits_vec, elements_vec));

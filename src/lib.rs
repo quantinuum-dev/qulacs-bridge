@@ -9,6 +9,14 @@ pub mod ffi {
         imag: f64,
     }
 
+    #[derive(Debug, PartialEq)]
+    #[repr(u32)]
+    enum Pauli {
+        X = 1,
+        Y = 2,
+        Z = 3,
+    }
+
     unsafe extern "C++" {
         include!("qulacs-bridge/include/qulacs-bridge.h");
 
@@ -57,6 +65,11 @@ pub mod ffi {
         pub fn new_r_y_gate(index: u32, angle: f64) -> UniquePtr<QuantumGateBase>;
         pub fn new_r_z_gate(index: u32, angle: f64) -> UniquePtr<QuantumGateBase>;
         pub fn new_cnot_gate(control: u32, target: u32) -> UniquePtr<QuantumGateBase>;
+        pub fn new_pauli_rotation_gate(
+            target_qubits: &[u32],
+            paulis: &[Pauli],
+            angle: f64,
+        ) -> UniquePtr<QuantumGateBase>;
         pub fn new_diagonal_matrix_gate(
             target_qubits: &[u32],
             elements: &[Complex],

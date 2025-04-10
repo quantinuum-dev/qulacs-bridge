@@ -13,6 +13,7 @@
 #include "rust/cxx.h"
 
 struct Complex;
+enum class Pauli : uint32_t;
 
 std::unique_ptr<QuantumStateBase> new_quantum_state(uint32_t qubit_count_,
                                                     bool use_multi_cpu);
@@ -65,7 +66,9 @@ std::unique_ptr<QuantumGateBase> new_r_z_gate(uint32_t index, double angle);
 
 std::unique_ptr<QuantumGateBase> new_cnot_gate(uint32_t control,
                                                uint32_t target);
-
+std::unique_ptr<QuantumGateBase>
+new_pauli_rotation_gate(rust::Slice<const uint32_t> target_qubits,
+                        rust::Slice<const Pauli> paulis, double angle);
 std::unique_ptr<QuantumGateBase>
 new_diagonal_matrix_gate(rust::Slice<const uint32_t> target_qubits,
                          rust::Slice<const Complex> elements);
