@@ -174,17 +174,6 @@ std::unique_ptr<QuantumGateBase> new_cnot_gate(uint32_t control,
   return ptr;
 }
 
-uint32_t to_pauli_value(const Pauli p) {
-  switch (p) {
-  case Pauli::X:
-    return 1;
-  case Pauli::Y:
-    return 2;
-  case Pauli::Z:
-    return 3;
-  }
-}
-
 std::unique_ptr<QuantumGateBase>
 new_pauli_rotation_gate(rust::Slice<const uint32_t> target_qubits,
                         rust::Slice<const Pauli> paulis, double angle) {
@@ -193,7 +182,10 @@ new_pauli_rotation_gate(rust::Slice<const uint32_t> target_qubits,
             std::back_inserter(target_qubits_vec));
 
   std::vector<uint32_t> paulis_vec(paulis.size());
-  std::transform(paulis.begin(), paulis.end(), paulis_vec.begin(), to_pauli_value);
+  std::transform(paulis.begin(), paulis.end(), paulis_vec.begin(),
+                 [](const Pauli p) {
+                   return static_cast<std::underlying_type_t<Pauli>>(p);
+                 });
 
   auto pauli = new PauliOperator(target_qubits_vec, paulis_vec, angle);
   return std::unique_ptr<ClsPauliRotationGate>(

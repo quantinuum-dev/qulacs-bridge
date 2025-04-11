@@ -25,6 +25,8 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@main
       - name: Install devenv.sh
         run: nix profile install nixpkgs#devenv
+      - name: Configure git user from GitHub token
+        uses: release-plz/git-config@59144859caf016f8b817a2ac9b051578729173c4
       - name: Run release-plz
         run: |
           devenv shell release-plz release-pr -- --git-token ${{ secrets.RELEASE_PLZ_TOKEN }}
