@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3](https://github.com/quantinuum-dev/qulacs-bridge/compare/v0.1.2...v0.1.3) - 2025-04-15
+
+### Fixed
+
+- Correct path handling in build.rs
+
+### Other
+
+- Merge pull request #24 from quantinuum-dev/push-vnkszmkvpmtq
+
 ## [0.1.2](https://github.com/quantinuum-dev/qulacs-bridge/compare/v0.1.1...v0.1.2) - 2025-04-15
 
 ### Fixed
