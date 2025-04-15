@@ -16,7 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Other
 
 - Merge pull request #24 from quantinuum-dev/push-vnkszmkvpmtq
-- :JJ: Enter a description for the first commit.
 
 ## [0.1.2](https://github.com/quantinuum-dev/qulacs-bridge/compare/v0.1.1...v0.1.2) - 2025-04-15
 
