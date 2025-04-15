@@ -1,7 +1,7 @@
 [package]
 name = "qulacs-bridge"
 description = "High level bindings to Qulacs the Quantum Circuit Simulator"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 license = "Apache-2.0"
 keywords = ["quantum", "simulator", "qulacs"]
