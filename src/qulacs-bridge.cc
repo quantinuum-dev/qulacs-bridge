@@ -40,12 +40,13 @@ quantum_state_sampling(const std::unique_ptr<QuantumStateBase> &state,
 
 rust::Vec<Complex>
 get_state_vector(const std::unique_ptr<QuantumStateCpu> &state) {
-  Eigen::VectorXcd state_vector =
-      Eigen::Map<Eigen::VectorXcd>(state->data_cpp(), state->dim);
+  ComplexVector state_vector =
+      Eigen::Map<ComplexVector>(state->data_cpp(), state->dim);
   rust::Vec<Complex> rust_state_vector;
-  std::transform(
-      state_vector.begin(), state_vector.end(), rust_state_vector.begin(),
-      [](auto element) { return Complex{element.real(), element.imag()}; });
+  std::transform(std::begin(state_vector), std::end(state_vector),
+                 rust_state_vector.begin(), [](auto element) {
+                   return Complex{element.real(), element.imag()};
+                 });
   return rust_state_vector;
 }
 
@@ -201,7 +202,7 @@ new_diagonal_matrix_gate(rust::Slice<const uint32_t> target_qubits,
 
   ComplexVector elements_vec(elements.size());
   std::transform(
-      elements.begin(), elements.end(), elements_vec.begin(),
+      elements.begin(), elements.end(), std::begin(elements_vec),
       [](Complex c) { return std::complex<double>(c.real, c.imag); });
 
   return std::unique_ptr<QuantumGateDiagonalMatrix>(
