@@ -263,7 +263,7 @@ dependencies = [
 
 [[package]]
 name = "qulacs-bridge"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "cxx",
  "cxx-build",
