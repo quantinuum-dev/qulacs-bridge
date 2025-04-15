@@ -2,7 +2,12 @@ use std::env;
 use std::path::PathBuf;
 
 fn main() {
-    let qulacs_path = PathBuf::from(env::var("LIBQULACS_PATH").unwrap());
+    let qulacs_path = PathBuf::from(env::var("QULACS_PATH").unwrap());
+    let mut qulacs_lib = qulacs_path.clone();
+    qulacs_lib.push("/lib");
+
+    let mut qulacs_include = qulacs_path.clone();
+    qulacs_include.push("/include");
     println!(
         "cargo:rustc-link-search={}",
         qulacs_path
@@ -18,6 +23,7 @@ fn main() {
     let eigen = pkg_config::probe_library("eigen3").unwrap();
     cxx_build::bridge("src/lib.rs")
         .file("src/qulacs-bridge.cc")
+        .include(qulacs_include)
         .includes(eigen.include_paths)
         .flag("-fext-numeric-literals")
         .flag("-fopenmp") // todo: better way to do this?
