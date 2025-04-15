@@ -3,7 +3,7 @@ let
   qulacs = pkgs.callPackage ./nix/qulacs.nix {};
 in {
   env = {
-    QULACS_PATH = "${qulacs}";
+    QULACS_PATH = qulacs;
     LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
   };
   
