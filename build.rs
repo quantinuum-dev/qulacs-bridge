@@ -4,10 +4,10 @@ use std::path::PathBuf;
 fn main() {
     let qulacs_path = PathBuf::from(env::var("QULACS_PATH").unwrap());
     let mut qulacs_lib = qulacs_path.clone();
-    qulacs_lib.push("/lib");
+    qulacs_lib.push("lib");
 
     let mut qulacs_include = qulacs_path.clone();
-    qulacs_include.push("/include");
+    qulacs_include.push("include");
     println!(
         "cargo:rustc-link-search={}",
         qulacs_path
