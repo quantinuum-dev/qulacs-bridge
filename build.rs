@@ -10,7 +10,7 @@ fn main() {
     qulacs_include.push("include");
     println!(
         "cargo:rustc-link-search={}",
-        qulacs_path
+        qulacs_lib
             .canonicalize()
             .expect("cannot cannonicalize path")
             .to_string_lossy()
