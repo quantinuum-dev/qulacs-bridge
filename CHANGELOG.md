@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.6](https://github.com/quantinuum-dev/qulacs-bridge/compare/v0.1.5...v0.1.6) - 2025-04-16
+
+### Fixed
+
+- Correct link directive ([#30](https://github.com/quantinuum-dev/qulacs-bridge/pull/30))
+
 ## [0.1.5](https://github.com/quantinuum-dev/qulacs-bridge/compare/v0.1.4...v0.1.5) - 2025-04-15
 
 ### Fixed
