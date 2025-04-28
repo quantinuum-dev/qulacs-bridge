@@ -18,6 +18,8 @@ fn main() {
 
     println!("cargo:rustc-link-lib=cppsim_static");
     println!("cargo:rustc-link-lib=csim_static");
+
+    // Required for running tests
     println!("cargo:rustc-link-arg=-fopenmp");
 
     let eigen = pkg_config::probe_library("eigen3").unwrap();
@@ -25,8 +27,11 @@ fn main() {
         .file("src/qulacs-bridge.cc")
         .include(qulacs_include)
         .includes(eigen.include_paths)
-        .flag("-fext-numeric-literals")
-        .flag("-fopenmp") // todo: better way to do this?
+        .flag_if_supported("-fext-numeric-literals")
+        // gcc
+        .flag_if_supported("-fopenmp")
+        // clang
+        .flag_if_supported("-fopenmp=libgomp")
         .std("c++14")
         .compile("qulacs-bridge");
 

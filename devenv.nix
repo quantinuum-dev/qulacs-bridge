@@ -7,7 +7,16 @@ in {
     LIBCLANG_PATH = "${pkgs.libclang.lib}/lib";
   };
   
-  packages = [ pkgs.boost pkgs.eigen pkgs.mpi qulacs pkgs.git pkgs.release-plz pkgs.cargo-semver-checks ];
+  packages = [
+    pkgs.boost
+    pkgs.eigen
+    pkgs.mpi
+    qulacs
+    
+    pkgs.release-plz
+    pkgs.cargo-semver-checks
+  ];
+
   languages.rust.enable = true;
   languages.nix.enable = true;
 }
