@@ -17,7 +17,6 @@ in {
     pkgs.cargo-semver-checks
   ];
 
-  languages.cplusplus.enable = true;
   languages.rust.enable = true;
   languages.nix.enable = true;
 }
