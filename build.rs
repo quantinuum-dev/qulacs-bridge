@@ -27,11 +27,11 @@ fn main() {
         .file("src/qulacs-bridge.cc")
         .include(qulacs_include)
         .includes(eigen.include_paths)
-        .flag_if_supported("-fext-numeric-literals")
-        // gcc
-        .flag_if_supported("-fopenmp")
-        // clang
-        .flag_if_supported("-fopenmp=libgomp")
+         .flag_if_supported("-fext-numeric-literals")
+         // gcc
+         .flag_if_supported("-fopenmp")
+         // clang
+         .flag_if_supported("-fopenmp=libgomp")
         .std("c++14")
         .compile("qulacs-bridge");
 
