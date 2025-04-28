@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.7](https://github.com/quantinuum-dev/qulacs-bridge/compare/v0.1.6...v0.1.7) - 2025-04-28
+
+### Added
+
+- Only use numerics/OMP flags if supported ([#32](https://github.com/quantinuum-dev/qulacs-bridge/pull/32))
+
 ## [0.1.6](https://github.com/quantinuum-dev/qulacs-bridge/compare/v0.1.5...v0.1.6) - 2025-04-16
 
 ### Fixed
