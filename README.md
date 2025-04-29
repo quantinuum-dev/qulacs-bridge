@@ -20,7 +20,6 @@ fn main() {
 ```rust
 let state = new_quantum_state(3, false);
 set_haar_random_state(&state);
-// Not a random state here.
 
 let circuit = new_quantum_circuit(3);
 add_x_gate(&circuit, 0);
