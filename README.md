@@ -4,7 +4,7 @@
 
 ## Usage
 
-This library requires that QULACAS_PATH is set and points at the direction of a qulacs install.
+This library requires that QULACS_PATH is set and points at the direction of a qulacs install.
 
 Additionally you will need to include a `build.rs` in your project that provides the -fopenmp
 flag to your linker.
